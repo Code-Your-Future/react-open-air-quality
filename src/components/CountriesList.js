@@ -17,7 +17,7 @@ class CountriesList extends Component {
   render() {
     return (
       <div>
-        <select onChange={this.props.onCountryChange}>
+        <select onChange={this.props.onCountryChange} value={this.props.selectedCountry}>
           <option value="-1" key="-1">Select a country</option>
             {this.renderCountries()}
         </select>

@@ -121,24 +121,43 @@ class MeasurementDetails extends React.Component {
 
     const url = `https://api.openaq.org/v1/measurements?country=${countryCode}&parameter[]=co&parameter[]=pm25`;
 
+    // Let's signal that we started fetching the data, so we can display the text
+    // "Loading data" in the page.
+    this.setState({
+      isFetchingData: true,
+      isFetchError: false
+    });
+
     fetch(url)
       .then(response => response.json())
-      .then(data => {
-        this.setState({
-          // The data comes back as an object with an array called "results".
-          // We take the first element of this array, as it contains our measurement data.
-          measurementData: data.results[0],
-          isFetchingData: false,
-        });
-      })
-      .catch(() => {
-        // There was an error when fetching the data. The component needs to know
-        // this so it can remove the "Loading" message.
-        this.setState({
-          isFetchingData: false,
-          isFetchError: true,
-        });
-      });;
+      .then(this.getCountryStatisticsSuccess)
+      .catch(this.getCountryStatisticsError);
+  }
+
+  /*
+    Notice that we need to use the "= () =>" notation. "getCountryStatisticsSuccess"
+    and "getCountryStatisticsError" are callbacks from "fetch", so we need to make
+    sure that we can still access the correct "this" in order to update the state.
+
+    We do this by using an anonymous function, which will keep the context of the
+    MeasurementDetails class.
+  */
+  getCountryStatisticsSuccess = (data) => {
+    this.setState({
+      // The data comes back as an object with an array called "results".
+      // We take the first element of this array, as it contains our measurement data.
+      measurementData: data.results[0],
+      isFetchingData: false,
+    });
+  }
+
+  getCountryStatisticsError = () => {
+    // There was an error when fetching the data. The component needs to know
+    // this so it can remove the "Loading" message.
+    this.setState({
+      isFetchingData: false,
+      isFetchError: true,
+    });
   }
 }
 

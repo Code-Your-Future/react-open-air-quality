@@ -6,6 +6,7 @@ import CountriesList from './components/CountriesList';
 class App extends Component {
   constructor(props) {
     super(props);
+
     this.state = {
       // Populates the dropdown box ("CountriesList" component)
       countriesList: [],
@@ -21,6 +22,14 @@ class App extends Component {
   componentDidMount() {
     // Let's start by populating the dropdown box.
     this.getCountriesList();
+  }
+
+  componentDidUpdate(previousProps) {
+    if (
+      previousProps.params.countryCode !== this.props.params.countryCode
+    ) {
+      this.setState({ selectedCountry: this.props.params.countryCode });
+    }
   }
 
   /*
@@ -65,6 +74,7 @@ class App extends Component {
           <div>
             <CountriesList
               countries={this.state.countriesList}
+              selectedCountry={this.state.selectedCountry}
               onCountryChange={this.onCountryChange}
             />
           </div>
