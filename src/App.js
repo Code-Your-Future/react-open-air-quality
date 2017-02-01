@@ -28,6 +28,9 @@ class App extends Component {
     if (
       previousProps.params.countryCode !== this.props.params.countryCode
     ) {
+      // When the user clicks the "Back" and "Next" buttons in their browser,
+      // this line of code assures that the dropdown box displays the right
+      // country
       this.setState({ selectedCountry: this.props.params.countryCode });
     }
   }
